@@ -1,0 +1,153 @@
+% main.tex
+% Axiomatic Fundamentalism — General, framework-agnostic guideline
+\documentclass[12pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{enumitem}
+\setlist{nosep}
+
+\title{Axiomatic Fundamentalism:\\
+A Concise Guide for Authors and Reviewers}
+\author{}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+This document sets a discipline for writing and reviewing work that proceeds \emph{only} from stated axioms. 
+Every claim must be a logical consequence of those axioms; no external ``laws'' or ad hoc postulates are allowed as premises. 
+All models are relational: distinctions generate relations; within a model nothing exists beyond declared distinctions, the relations they induce, and mathematics applied to them. 
+Information-theoretic measures constrain representation and resolution; they are warnings to the modeller, not physical laws.
+\end{abstract}
+
+\section{Purpose and Scope}
+\label{sec:purpose}
+The goal is traceable, scope-tight derivations: state axioms once; derive consequences using mathematics; specialise only by explicit modelling choices; extract corollaries; propose falsification hooks. 
+Avoid defending the axioms or digressing into edge cases beyond scope.
+
+\section{Core Definitions}
+\label{sec:definitions}
+\begin{itemize}
+  \item \textbf{Axiom} (\(\mathcal A\)): A precisely stated sentence taken as true within the document’s scope.
+  \item \textbf{Consequence}: Any statement derived from \(\mathcal A\) by mathematics (algebra, calculus, logic, measure theory, differential geometry, \emph{etc.}) together with declared modelling choices.
+  \item \textbf{Modelling choice}: A declared definition or constraint (variables, units, admissible sets, boundaries, norms/metrics, kernels, objective or cost functionals). A modelling choice is \emph{not} an empirical postulate.
+  \item \textbf{External postulate/law}: A named principle imported from outside \(\mathcal A\) (e.g., “because Law X says so”). Disallowed as a premise.
+\end{itemize}
+
+\section{Core Commitments (Axiomatic Fundamentalism)}
+\label{sec:commitments}
+\begin{enumerate}[label=\textbf{AF\arabic*.}]
+  \item \textbf{State axioms once, precisely.} Define symbols and scope. Do \emph{not} defend the axioms; simply state them.
+  \item \textbf{Derive with mathematics only.} Immediate consequences follow from axioms via mathematics, not by appeal to external laws.
+  \item \textbf{Specialise by declaration, not by postulate.} Introduce any constraint or structure as an explicit modelling choice.
+  \item \textbf{No midstream imports.} Never justify a step by invoking an external “law” or tacit empirical rule.
+  \item \textbf{No retrofitting.} Do not alter axioms or smuggle new premises to force a target result after derivations begin.
+  \item \textbf{Scope discipline.} Exclude edge cases beyond scope instead of speculating; keep proofs local and self-contained.
+  \item \textbf{Traceability \& falsifiability.} Each derived claim should indicate which axioms and choices it depends on and admit concrete tests that could contradict it.
+\end{enumerate}
+
+\section{Relational Foundations (Universal)}
+\label{sec:relational}
+All models are relational. Distinctions generate relations; within a model nothing exists beyond declared distinctions, the relations they induce, and mathematics applied to them.
+
+\paragraph{Glossary.}
+\begin{itemize}
+  \item \textbf{Target}: The system being modelled.
+  \item \textbf{Distinction}: A declared differentiating property or partition on outcomes.
+  \item \textbf{Relation}: A mapping/predicate constructed from distinctions (e.g., adjacency, order, metric).
+  \item \textbf{Model universe}: Everything admitted to exist \emph{within} the model—declared distinctions, induced relations, and mathematical constructions thereof.
+\end{itemize}
+
+\paragraph{Relational foundations (RF).}
+\begin{enumerate}[label=\textbf{RF\arabic*.}]
+  \item \textbf{Distinction precedes relation.} All relations in the model are generated from declared distinctions.
+  \item \textbf{Closure.} Within the model universe, nothing else exists: no distinction \(\Rightarrow\) no relation; no relation \(\Rightarrow\) no model entity.
+  \item \textbf{No absolutes.} Undeclared “absolute properties” cannot enter derivations.
+  \item \textbf{Information is bookkeeping, not a law.} Information-theoretic measures constrain what can be represented or resolved; they are warnings to the modeller, not physical postulates.
+  \item \textbf{No elevation of limitations.} Do not promote modelling limitations (resolution, coding, partition choice) to universal laws.
+\end{enumerate}
+
+\section{Protocol for Authors}
+\label{sec:protocol}
+\begin{enumerate}
+  \item \textbf{State the axiom(s).} One place; final form; symbols and domains fixed.
+  \item \textbf{Fix scope.} What the axiom covers and what is explicitly out of scope. No defence essays.
+  \item \textbf{Derive immediate consequences.} From axioms by mathematics only. Keep proofs local.
+  \item \textbf{Declare modelling choices.} Explicitly define any resources, domains, geometries, metrics, mobilities, gauges/units, cost functionals.
+  \item \textbf{Extract corollaries.} From consequences + declared choices, by algebra/calculus/variation. If a result resembles a known “law,” present it as \emph{derived}; never cite the law as a premise.
+  \item \textbf{Demonstrations.} Provide examples/toy models that instantiate earlier steps; introduce no new premises.
+  \item \textbf{Falsification hooks.} List concrete tests that would contradict specific derived statements.
+\end{enumerate}
+
+\section{Allowed vs.\ Disallowed Moves}
+\label{sec:moves}
+\paragraph{Allowed (as premises).}
+\begin{itemize}
+  \item Pure mathematics and logic.
+  \item Definitions of symbols, units, admissible sets, boundaries, coordinate choices, norms, metrics.
+  \item Declared parameterisations and cost functionals (kernels, mobilities, priors, topologies), introduced as modelling choices.
+\end{itemize}
+
+\paragraph{Disallowed (as premises).}
+\begin{itemize}
+  \item Importing external “laws” mid-derivation.
+  \item Retrofitting the axiom or adding hidden assumptions to force agreement with a target result.
+  \item Defensive essays about plausibility of the axiom.
+  \item Edge-case digressions beyond scope; mark them out-of-scope instead.
+\end{itemize}
+
+\section{Structure and Labelling (Mechanics)}
+\label{sec:mechanics}
+\begin{itemize}
+  \item Use clear hierarchy (Sections, Subsections). Give important claims and equations unique labels.
+  \item References must point to a single, precise anchor—avoid vague ranges like “see §§??–??”.
+  \item Keep notation and units consistent; (re)declare gauge/units once per section if needed.
+  \item Mark modelling choices explicitly as \emph{Definition} or \emph{Choice} at first use.
+\end{itemize}
+
+\section{Reviewer Rubric (Binary Checks)}
+\label{sec:rubric}
+\begin{enumerate}
+  \item Are axioms stated once, precisely, with symbols defined and scope fixed?
+  \item Do immediate consequences follow from the axiom(s) and mathematics only?
+  \item Are modelling choices declared explicitly (not smuggled as postulates)?
+  \item Are corollaries proved without importing external laws?
+  \item Do demonstrations instantiate earlier steps only?
+  \item Are falsification items tied to specific derived statements?
+  \item Are labels unique and references precise; is notation/units consistent?
+  \item Are relational foundations RF1–RF5 respected?
+\end{enumerate}
+
+\section{Minimal Author Templates}
+\label{sec:templates}
+
+\paragraph{Axiom (template).}
+\begin{quote}
+\textbf{Axiom A1 (Name).} \emph{Formal statement of \(\mathcal A\).}\hfill[\textit{Scope:} …]
+\end{quote}
+
+\paragraph{Immediate consequence (template).}
+\begin{quote}
+\textbf{Consequence C1.} \emph{Statement.}\\
+\textit{Proof sketch.} From A1 by [mathematical steps] only.
+\end{quote}
+
+\paragraph{Modelling choice (template).}
+\begin{quote}
+\textbf{Choice D1.} \emph{We define} [objects/sets/constraints] \emph{to be} … \hfill[\textit{Rationale:} clarity only]
+\end{quote}
+
+\paragraph{Corollary (template).}
+\begin{quote}
+\textbf{Corollary K1.} \emph{Statement.}\\
+\textit{Derivation.} From C1 and D1 by [algebra/calculus/variation]; no external postulates.
+\end{quote}
+
+\section{Release and Versioning}
+\label{sec:release}
+Maintain a short changelog noting added axioms, altered scopes, and new modelling choices. Any change to an axiom increments the document’s major version.
+
+\end{document}
