@@ -1,5 +1,7 @@
 =# Axiomatic Fundamentalism (AF)
 ### A Logical Protocol for Traceable Research
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.17561188.svg)](https://doi.org/10.5281/zenodo.17561188)
+
 
 This repository contains the *Axiomatic Fundamentalism (AF)* protocol, a strict logical discipline for conducting and reviewing traceable research.
 
