@@ -4,9 +4,13 @@ on:
   workflow_dispatch:
   push:
     branches: [ main ]
-    paths: [ 'tex/**' ]
+    paths:
+      - 'tex/**'
+      - '.github/workflows/build-pdf.yml' # <-- This is the fix
   pull_request:
-    paths: [ 'tex/**' ]
+    paths:
+      - 'tex/**'
+      - '.github/workflows/build-pdf.yml' # <-- And this is the fix
 
 jobs:
   latex:
@@ -78,9 +82,9 @@ jobs:
         shell: bash
         run: |
           if [[ "${{ github.event_name }}" == "pull_request" ]]; then
-            NAME="axiomatic-fundamentalism-PR${{ github.event.pull_request.number }}"
+            NAME="general-mechanics-PR${{ github.event.pull_request.number }}"
           else
-            NAME="axiomatic-fundamentalism-$(date +%F)"
+            NAME="general-mechanics-$(date +%F)"
           fi
           # Note: The original path 'tex/main.pdf' is assumed to be correct
           cp tex/main.pdf "$NAME.pdf"
@@ -107,7 +111,7 @@ jobs:
               issue_number: context.issue.number,
               owner,
               repo,
-              body: `📄 **Axiomatic Fundamentalism PDF preview**\n\n` +
+              body: `📄 **general-mechanics PDF preview**\n\n` +
                     `The build artifact is attached to this workflow run.\n\n` +
                     `➡️ **Download**: look for **${name}** in the "Artifacts" section of the run.`
             });
