@@ -1,0 +1,41 @@
+{
+  "title": "Axiomatic Fundamentalism (AF): A Logical Protocol for Traceable Research",
+  "upload_type": "publication",
+  "publication_type": "article",
+  "description": "Axiomatic Fundamentalism (AF): A strict logical protocol for traceable, auditable research. This release contains the journal-style article (PDF) and full source in GitHub.",
+  "creators": [
+    {
+      "name": "Reginald, Poyau",
+      "affiliation": "Independent Researcher, Switzerland",
+      "orcid": "0000-0002-7064-4069"
+    }
+  ],
+  "access_right": "open",
+  "license": "cc-by-4.0",
+  "language": "eng",
+  "keywords": [
+    "axiomatic fundamentalism",
+    "traceable research",
+    "research methodology",
+    "formal logic",
+    "scientific integrity",
+    "falsifiability",
+    "relational modeling"
+  ],
+  "subjects": [
+    { "term": "Methodology", "scheme": "dewey" },
+    { "term": "Philosophy of Science", "scheme": "dewey" },
+    { "term": "Formal Logic", "scheme": "dewey" },
+    { "term": "Research Integrity", "scheme": "dewey" }
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "${REPO_URL}",
+      "relation": "isSupplementTo",
+      "resource_type": "publication-article",
+      "scheme": "url"
+    }
+  ],
+  "version": "${TAG}"
+  "notes": "Journal-style methodological article generated from GitHub release. PDF is the primary citable artifact; source files available in repository."
+}
