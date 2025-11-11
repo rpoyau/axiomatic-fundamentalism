@@ -7,7 +7,7 @@
     {
       "name": "Reginald, Poyau",
       "affiliation": "Independent Researcher, Switzerland",
-      "orcid": "0000-0002-7064-4069"
+      "orcid": "0009-0007-8303-8627"
     }
   ],
   "access_right": "open",
@@ -23,10 +23,22 @@
     "relational modeling"
   ],
   "subjects": [
-    { "term": "Methodology", "scheme": "dewey" },
-    { "term": "Philosophy of Science", "scheme": "dewey" },
-    { "term": "Formal Logic", "scheme": "dewey" },
-    { "term": "Research Integrity", "scheme": "dewey" }
+    {
+      "term": "Methodology",
+      "scheme": "dewey"
+    },
+    {
+      "term": "Philosophy of Science",
+      "scheme": "dewey"
+    },
+    {
+      "term": "Formal Logic",
+      "scheme": "dewey"
+    },
+    {
+      "term": "Research Integrity",
+      "scheme": "dewey"
+    }
   ],
   "related_identifiers": [
     {
