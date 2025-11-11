@@ -1,0 +1,97 @@
+name: Zenodo Deposit (Auto + Preview + DOI Reuse)
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      preview:
+        description: 'Create draft on Zenodo sandbox (true = preview, false = publish)'
+        required: true
+        default: 'false'
+        type: boolean
+
+jobs:
+  zenodo:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set tag & repo info
+        run: |
+          if [[ "${{ github.event_name }}" == "release" ]]; then
+            echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+          fi
+          echo "REPO_NAME=${{ github.repository }}" | sed 's|.*/||' >> $GITHUB_ENV
+          echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+
+      - name: Find PDF
+        id: pdf
+        run: |
+          PDF=$(find . -type f -name "*${{ env.TAG }}*.pdf" -print -quit)
+          if [[ -z "$PDF" ]]; then
+            echo "No PDF found for tag ${{ env.TAG }}" >&2
+            exit 1
+          fi
+          echo "path=$PDF" >> $GITHUB_OUTPUT
+          echo "name=$(basename "$PDF")" >> $GITHUB_OUTPUT
+
+      - name: Render .zenodo.json
+        run: |
+          envsubst < .zenodo.json > .zenodo.rendered.json
+          mv .zenodo.rendered.json .zenodo.json
+
+      - name: Load existing DOI (if any)
+        id: doi
+        run: |
+          DOI_FILE=".zenodo_doi"
+          if [[ -f "$DOI_FILE" ]]; then
+            DOI=$(cat "$DOI_FILE")
+            echo "Using existing DOI: $DOI"
+            echo "doi=$DOI" >> $GITHUB_OUTPUT
+          else
+            echo "No existing DOI → new deposit"
+          fi
+
+      - name: Create bundle
+        run: |
+          zip release-bundle.zip \
+            "${{ steps.pdf.outputs.path }}" \
+            .zenodo.json
+
+      - name: Upload to Zenodo
+        id: upload
+        uses: zenodraft/action@v1
+        with:
+          deposit_id: ""
+          sandbox: ${{ inputs.preview || false }}
+          token: ${{ secrets.ZENODO_TOKEN }}
+          files: release-bundle.zip
+
+      - name: Save DOI after first publish
+        if: ${{ !inputs.preview && !env.doi }}
+        run: |
+          DOI=$(jq -r .doi .zenodo.json.response.json || echo "")
+          if [[ "$DOI" =~ ^10\.5281/zenodo\.[0-9]+ ]]; then
+            echo "$DOI" > .zenodo_doi
+            git config user.name "github-actions"
+            git config user.email "actions@github.com"
+            git add .zenodo_doi
+            git commit -m "chore: save Zenodo DOI $DOI"
+            git push
+            echo "DOI saved: $DOI"
+          fi
+
+      - name: Show result
+        run: |
+          if ${{ inputs.preview }}; then
+            echo "Preview: https://sandbox.zenodo.org/deposit/${{ steps.upload.outputs.deposit_id }}"
+          else
+            echo "Published: https://zenodo.org/record/${{ steps.upload.outputs.deposit_id }}"
+          fi
