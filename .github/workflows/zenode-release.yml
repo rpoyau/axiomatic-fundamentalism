@@ -70,7 +70,7 @@ jobs:
       - name: Upload to Zenodo
         id: upload
         # CRITICAL FIX: Changed v1 to v2
-        uses: zenodraft/action@v2
+        uses: zenodraft/action@0.13.3
         with:
           deposit_id: ""
           sandbox: ${{ inputs.preview || false }}
