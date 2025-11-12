@@ -28,9 +28,12 @@ jobs:
           else
             echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
-          # FIX: Use bash parameter expansion (${{ github.repository##*/ }})
-          # to extract just the repository name and echo the required NAME=VALUE format.
-          echo "REPO_NAME=${{ github.repository##*/ }}" >> $GITHUB_ENV
+          
+          # FIX: Assign the full repository string to a shell variable first,
+          # then use standard Bash expansion (##*/) to strip the owner name.
+          FULL_REPO_NAME="${{ github.repository }}"
+          echo "REPO_NAME=${FULL_REPO_NAME##*/}" >> $GITHUB_ENV
+          
           echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
 
       - name: Find PDF
