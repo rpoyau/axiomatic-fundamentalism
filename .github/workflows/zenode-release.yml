@@ -29,7 +29,7 @@ jobs:
             echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
           
-          # FIX: Assign the full repository string to a shell variable first,
+          # Assign the full repository string to a shell variable first,
           # then use standard Bash expansion (##*/) to strip the owner name.
           FULL_REPO_NAME="${{ github.repository }}"
           echo "REPO_NAME=${FULL_REPO_NAME##*/}" >> $GITHUB_ENV
@@ -74,8 +74,8 @@ jobs:
 
       - name: Upload to Zenodo
         id: upload
-        # CRITICAL FIX: Changed v1 to v2
-        uses: zenodraft/action@v2
+        # UPDATED: Using user-preferred version 0.13.3
+        uses: zenodraft/action@0.13.3
         with:
           deposit_id: ""
           sandbox: ${{ inputs.preview || false }}
