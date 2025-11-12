@@ -15,37 +15,61 @@ jobs:
   zenodo:
     runs-on: ubuntu-latest
     permissions:
-      contents: read
-
+      contents: write # NOTE: Changed from 'read' to 'write' so the last step can push the DOI file.
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          # Required for the last step to push the .zenodo_doi file
+          token: ${{ secrets.GITHUB_TOKEN }} 
+          fetch-depth: 0 # Fetch all history for proper tag/release info
 
       - name: Set tag & repo info
         run: |
           if [[ "${{ github.event_name }}" == "release" ]]; then
             echo "TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           else
-            echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
+            # For manual dispatch, use the latest main commit SHA as a safe default TAG
+            echo "TAG=${{ github.sha }}" >> $GITHUB_ENV 
           fi
           
-          # Assign the full repository string to a shell variable first,
-          # then use standard Bash expansion (##*/) to strip the owner name.
           FULL_REPO_NAME="${{ github.repository }}"
           echo "REPO_NAME=${FULL_REPO_NAME##*/}" >> $GITHUB_ENV
-          
           echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
+          
+          # Define the standard name we expect the PDF to be saved as
+          echo "PDF_ARTIFACT_NAME=axiomatic-fundamentalism-artifact" >> $GITHUB_ENV
+          echo "PDF_FILE_NAME=${{ env.REPO_NAME }}-${{ env.TAG }}.pdf" >> $GITHUB_ENV
 
-      - name: Find PDF
+      # NEW STEP: Download the PDF artifact created by the build workflow.
+      # This assumes the build-pdf.yml workflow has already run and uploaded the artifact.
+      - name: Download PDF Artifact
+        uses: actions/download-artifact@v4
+        with:
+          # Download the artifact by the standardized name
+          name: ${{ env.PDF_ARTIFACT_NAME }}
+          path: ./
+
+      - name: Find and Rename PDF for Zenodo
         id: pdf
         run: |
-          PDF=$(find . -type f -name "*${{ env.TAG }}*.pdf" -print -quit)
-          if [[ -z "$PDF" ]]; then
-            echo "No PDF found for tag ${{ env.TAG }}" >&2
+          # The artifact download results in a directory with the artifact's original name.
+          # We need to find the PDF inside that directory.
+          FOUND_PDF=$(find ${{ env.PDF_ARTIFACT_NAME }} -type f -name "*.pdf" -print -quit)
+          
+          if [[ -z "$FOUND_PDF" ]]; then
+            echo "No PDF found inside the downloaded artifact directory." >&2
             exit 1
           fi
-          echo "path=$PDF" >> $GITHUB_OUTPUT
-          echo "name=$(basename "$PDF")" >> $GITHUB_OUTPUT
+
+          # Rename and move the found PDF to the root using the standardized release name
+          # This ensures the zipped filename is consistent for Zenodo.
+          RELEASE_PDF_NAME="${{ env.REPO_NAME }}-${{ env.TAG }}.pdf"
+          cp "$FOUND_PDF" "$RELEASE_PDF_NAME"
+          
+          echo "path=$RELEASE_PDF_NAME" >> $GITHUB_OUTPUT
+          echo "name=$RELEASE_PDF_NAME" >> $GITHUB_OUTPUT
 
       - name: Render .zenodo.json
         run: |
@@ -67,14 +91,13 @@ jobs:
 
       - name: Create bundle
         run: |
-          # Zips the rendered metadata and the found PDF file
+          # Zips the rendered metadata and the standardized PDF file
           zip release-bundle.zip \
             "${{ steps.pdf.outputs.path }}" \
             .zenodo.json
 
       - name: Upload to Zenodo
         id: upload
-        # UPDATED: Using user-preferred version 0.13.3
         uses: zenodraft/action@0.13.3
         with:
           deposit_id: ""
@@ -85,7 +108,6 @@ jobs:
       - name: Save DOI after first publish
         if: ${{ !inputs.preview && !env.doi }}
         run: |
-          # This line requires the `jq` utility to be installed on the runner, which is standard on ubuntu-latest
           DOI=$(jq -r .doi .zenodo.json.response.json || echo "")
           if [[ "$DOI" =~ ^10\.5281/zenodo\.[0-9]+ ]]; then
             echo "$DOI" > .zenodo_doi
