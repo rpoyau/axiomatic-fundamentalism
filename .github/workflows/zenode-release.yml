@@ -28,7 +28,9 @@ jobs:
           else
             echo "TAG=${{ github.ref_name }}" >> $GITHUB_ENV
           fi
-          echo "REPO_NAME=${{ github.repository }}" | sed 's|.*/||' >> $GITHUB_ENV
+          # FIX: Use bash parameter expansion (${{ github.repository##*/ }})
+          # to extract just the repository name and echo the required NAME=VALUE format.
+          echo "REPO_NAME=${{ github.repository##*/ }}" >> $GITHUB_ENV
           echo "REPO_URL=https://github.com/${{ github.repository }}" >> $GITHUB_ENV
 
       - name: Find PDF
@@ -70,7 +72,7 @@ jobs:
       - name: Upload to Zenodo
         id: upload
         # CRITICAL FIX: Changed v1 to v2
-        uses: zenodraft/action@0.13.3
+        uses: zenodraft/action@v2
         with:
           deposit_id: ""
           sandbox: ${{ inputs.preview || false }}
