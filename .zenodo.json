@@ -22,32 +22,6 @@
     "falsifiability",
     "relational modeling"
   ],
-  "subjects": [
-    {
-      "term": "Methodology",
-      "scheme": "dewey"
-    },
-    {
-      "term": "Philosophy of Science",
-      "scheme": "dewey"
-    },
-    {
-      "term": "Formal Logic",
-      "scheme": "dewey"
-    },
-    {
-      "term": "Research Integrity",
-      "scheme": "dewey"
-    }
-  ],
-  "related_identifiers": [
-    {
-      "identifier": "${REPO_URL}",
-      "relation": "isSupplementTo",
-      "resource_type": "publication-article",
-      "scheme": "url"
-    }
-  ],
-  "version": "${TAG}"
+  "version": "${TAG}",
   "notes": "Journal-style methodological article generated from GitHub release. PDF is the primary citable artifact; source files available in repository."
 }
