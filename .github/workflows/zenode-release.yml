@@ -44,6 +44,7 @@ jobs:
 
       - name: Render .zenodo.json
         run: |
+          # Substitutes ${TAG} and ${REPO_URL} variables into the .zenodo.json file
           envsubst < .zenodo.json > .zenodo.rendered.json
           mv .zenodo.rendered.json .zenodo.json
 
@@ -61,13 +62,15 @@ jobs:
 
       - name: Create bundle
         run: |
+          # Zips the rendered metadata and the found PDF file
           zip release-bundle.zip \
             "${{ steps.pdf.outputs.path }}" \
             .zenodo.json
 
       - name: Upload to Zenodo
         id: upload
-        uses: zenodraft/action@v1
+        # CRITICAL FIX: Changed v1 to v2
+        uses: zenodraft/action@v2
         with:
           deposit_id: ""
           sandbox: ${{ inputs.preview || false }}
@@ -77,6 +80,7 @@ jobs:
       - name: Save DOI after first publish
         if: ${{ !inputs.preview && !env.doi }}
         run: |
+          # This line requires the `jq` utility to be installed on the runner, which is standard on ubuntu-latest
           DOI=$(jq -r .doi .zenodo.json.response.json || echo "")
           if [[ "$DOI" =~ ^10\.5281/zenodo\.[0-9]+ ]]; then
             echo "$DOI" > .zenodo_doi
